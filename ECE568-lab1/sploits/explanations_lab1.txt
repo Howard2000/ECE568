@@ -1,0 +1,23 @@
+#Joshua Ma, 1006726090, joshua.ma@mail.utoronto.ca
+#first2 last2, studentnum2, e-mail address2
+
+Target 1:
+
+Target 2: (Joshua)
+We need to bybass the overflow protection by overwriting variables len and i. The stack for foo() should be like this:
+        <--[buf][len][i][rbp][rip]
+Therefore, we can add what we want len and i to the attack string. However, these numbers contains \x00 (null), which will stop the reading of the buffer.
+We then use the env variables which the stack layout looks like this:
+        <--[arg0][arg1][env0][env1]......
+Now we have the full attack string stored in memory and we can change the return address of foo() to the address of our shellcode.
+
+
+
+Target 3: (Joshua)
+
+We need to overwrite the return address of foo(). The code is flawed because buf only has 64byte length but the length of arg1 is limited to 88, which is enough for us to attach 
+a list of addresses to overwrite the return address. This one works like target 1.
+
+
+Target 4:
+
