@@ -1,5 +1,5 @@
 #Joshua Ma, 1006726090, joshua.ma@mail.utoronto.ca
-#first2 last2, studentnum2, e-mail address2
+#Hao Zhu, 1006083765, howard.zhu@mail.utoronto.ca
 
 Target 1: (Howard)
 Just simply overflow the buffer to rewrite the buf. The stack structure is shown below:
