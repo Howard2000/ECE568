@@ -17,11 +17,8 @@ foo ( char *arg )
 	a = arg;
 	b = buf;
 	
-	for (i = 0; i <= len; i++){
+	for (i = 0; i <= len; i++)
 		*b++ = *a++;
-		printf("%d %d\n",i,len);
-	}
-		
 	
 	return (0);
 }

