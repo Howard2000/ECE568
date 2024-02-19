@@ -7,7 +7,7 @@
 
 #include "lib/sha1.h"
 
-#define debug_print
+// #define debug_print
 
 #define timer_len 8
 
@@ -19,21 +19,27 @@ int hex_to_binary_conversion(char * hex, uint8_t ** binary_result);
 static int
 validateTOTP(char * secret_hex, char * TOTP_string)
 {	
+	#ifdef debug_print
 	printf("\nvalidateTOTP:\n");
 	printf("secret hex: %s\n", secret_hex);
+	#endif
 	
 	// HOTP(K,T) = Truncate(HMAC(K,T))
 	//HMAC = H[(K XOR opad) + H((K XOR ipad) + M)] , M=T
 	//calculate T, store it in binary format
 	
 	time_t current_time = time(NULL);
+	#ifdef debug_print
 	printf("current time: %s", ctime(&current_time));
 	printf("time in sec: %d\n", current_time);
+	#endif
 
 	unsigned long int timer = 0;
 	timer = current_time/30;
+	#ifdef debug_print
 	printf("time in int: %ld\n", timer);
 	printf("size of int in bytes: %ld\n", sizeof(unsigned long int));
+	#endif
 
 	// timer = 123456;
 	
@@ -131,17 +137,17 @@ validateTOTP(char * secret_hex, char * TOTP_string)
 	#ifdef debug_print
 	printf("k:\n");
 	for (int i = 0; i < 64; i++){
-		printf("0x%hhx ", k[i]);
+		printf("0x%02hhx ", k[i]);
 	}
 	printf("\n");
 	printf("ipad:\n");
 	for (int i = 0; i < 64; i++){
-		printf("0x%hhx ", ipad[i]);
+		printf("0x%02hhx ", ipad[i]);
 	}
 	printf("\n");
 	printf("k_xor_ipad:\n");
 	for (int i = 0; i < 64; i++){
-		printf("0x%hhx ", k_xor_ipad[i]);
+		printf("0x%02hhx ", k_xor_ipad[i]);
 	}
 	printf("\n");
 	#endif
@@ -160,7 +166,7 @@ validateTOTP(char * secret_hex, char * TOTP_string)
 	// //test
 	printf("k_xor_ipad_and_T:\n");
 	for (int i = 0; i < 64+timer_len; i++){
-		printf("%hhx", k_xor_ipad_and_T[i]);
+		printf("%02hhx", k_xor_ipad_and_T[i]);
 	}
 	printf("\n");
 	#endif
@@ -169,19 +175,9 @@ validateTOTP(char * secret_hex, char * TOTP_string)
 	SHA1_INFO ctx;
 	uint8_t sha[SHA1_DIGEST_LENGTH];
 
-
-	// k_xor_ipad_and_T[0] = '\x26';
-	// k_xor_ipad_and_T[1] = '\x24';
-	printf("k_xor_ipad_and_T[0]: %hhx\n", k_xor_ipad_and_T[0]);
-	printf("k_xor_ipad_and_T[1]: %hhx\n", k_xor_ipad_and_T[1]);
-
-
 	sha1_init(&ctx);
 	sha1_update(&ctx, k_xor_ipad_and_T, 64); //hash 512 bits = 64 bytes, hash twice
 	sha1_update(&ctx, k_xor_ipad_and_T+64, timer_len);
-	// sha1_update(&ctx, k_xor_ipad_and_T, 64+timer_len); //hash 512 bits = 64 bytes, hash twice
-	// sha1_update(&ctx, k_xor_ipad_and_T, 64+timer_len);
-	// sha1_update(&ctx, "\x1100000000000000000000000000000000000000000000000000000000000000000000000", 1);
 	// keep calling sha1_update if you have more data to hash...
 	sha1_final(&ctx, sha);
 
@@ -191,7 +187,6 @@ validateTOTP(char * secret_hex, char * TOTP_string)
 	}
 	printf("\n");
 	#endif
-
 
 	//(5) K XOR opad
 	uint8_t k_xor_opad[64] = "\0";
@@ -217,7 +212,7 @@ validateTOTP(char * secret_hex, char * TOTP_string)
 	#ifdef debug_print
 	printf("k_xor_opad_and_H:\n");
 	for (int i = 0; i < 64+SHA1_DIGEST_LENGTH; i++){
-		printf("0x%hhx ", k_xor_opad_and_H[i]);
+		printf("%02hhx", k_xor_opad_and_H[i]);
 	}
 	printf("\n");
 	#endif
@@ -225,10 +220,6 @@ validateTOTP(char * secret_hex, char * TOTP_string)
 	//(7) H(K XOR opad + H(K XOR ipad + text))
 	SHA1_INFO ctx1;
 	uint8_t sha1[SHA1_DIGEST_LENGTH];
-
-	for (int i = 0; i < SHA1_DIGEST_LENGTH; i++){
-		sha1[i] = 0;
-	}
 
 	sha1_init(&ctx1);
 	sha1_update(&ctx1, k_xor_opad_and_H, 64); //hash 512 bits = 64 bytes, hash twice
@@ -271,9 +262,11 @@ validateTOTP(char * secret_hex, char * TOTP_string)
 	uint8_t Sbits[4];
 
 	//offset is the lower 4 bits of HS[19]
-	uint8_t offset = HS[19] & 0b00001111;
+	uint8_t offset = HS[19] & 0xf;
 
+	#ifdef debug_print
 	printf("HS[19]: %hhx, offset: %hhx\n", HS[19], offset);
+	#endif
 	
 	memcpy(Sbits, &(HS[offset+3]), 1);
 	memcpy(Sbits+1, &(HS[offset+2]), 1);
@@ -282,28 +275,33 @@ validateTOTP(char * secret_hex, char * TOTP_string)
 
 	Sbits[3] = Sbits[3] & 0x7f;  //take the lower 31 bits
 
+	#ifdef debug_print
 	for(int i = 0; i < 4; i++){
 		printf("Sbits[%d]: %hhx  ", i, Sbits[i]);
 	}
 	printf("\n");
+	#endif
 
 	//step 3
 	//covert Sbits to a int
 	unsigned int Snum;
 	memcpy(&Snum, Sbits, 4);
 
-	printf("Snum = %x\n", Snum);
+	#ifdef debug_print
+	printf("Snum = 0x%x\n", Snum);
+	#endif
 
 	//D = Snum mod 10^Digit
-	unsigned int TOTP_Calculated = Snum % (10*10*10*10*10*10-1);
-
-	printf("TOTP_Calculated: %d\n", TOTP_Calculated);
+	unsigned int TOTP_Calculated = Snum % (unsigned int)(10*10*10*10*10*10);
 
 	//TOTP_string ---> TOTP_input
 	unsigned int TOTP_input;
 	TOTP_input = atoi(TOTP_string);
 
-	printf("TOTP_input: %.6d\n", TOTP_input);
+	#ifdef debug_print
+	printf("TOTP_Calculated: %6d\n", TOTP_Calculated);
+	printf("TOTP_input: %06d\n", TOTP_input);
+	#endif
 
 	if (TOTP_Calculated == TOTP_input){
 		return (1);
@@ -339,7 +337,9 @@ main(int argc, char * argv[])
 int hex_to_binary_conversion(char * hex, uint8_t ** binary_result){
 	int hex_length = strlen(hex);
 	if (hex_length<=0){
+		#ifdef debug_print 
 		printf("Invalid hex number length: %d\n", hex_length);
+		#endif
 		return 0;
 	}
 
@@ -400,7 +400,9 @@ int hex_to_binary_conversion(char * hex, uint8_t ** binary_result){
 			digit = 15;
 			break;
 		default:
+			#ifdef debug_print
 			printf("Invalid hex digit: %c\n", hex[i]);
+			#endif
 			return 0;
 			break;
 		}

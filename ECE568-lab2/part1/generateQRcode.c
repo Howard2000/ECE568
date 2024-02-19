@@ -5,7 +5,7 @@
 
 #include "lib/encoding.h"
 
-#define debug_print
+// #define debug_print
 
 //convert a string of hex values to a array of binary values
 //e.g. 'a' -> 1010
@@ -23,7 +23,6 @@ main(int argc, char * argv[])
 	char *	issuer = argv[1];
 	char *	accountName = argv[2];
 	char *	secret_hex = argv[3];
-
 
 	assert (strlen(issuer) <= 100);
 	assert (strlen(accountName) <= 100);
@@ -51,23 +50,18 @@ main(int argc, char * argv[])
 	printf("\n");
 	#endif
 
-
 	//encode all inputs
 	const char *encoded_accountName; 
 	const char *encoded_issuer;
 	int secret_base32_length = secret_binary_length*8/5;
 	char *secret_base32 = malloc(sizeof(char)*secret_base32_length); 
 
-
 	encoded_accountName = urlEncode(accountName);
 	encoded_issuer = urlEncode(issuer);
 
-
-
 	int ret = base32_encode(secret_binary, secret_binary_length, secret_base32, secret_base32_length);
 	// int ret = base32_encode("\x12\x34\x56\x78\x90\x12\x34\x56\x78\x90", 10, secret_base32, secret_base32_length);
-	printf("\nbase32: %s\n", secret_base32);
-
+	// printf("\nbase32: %s\n", secret_base32);
 
 	char URL[1024];
 	strcat(URL, "otpauth://totp/");
@@ -78,10 +72,8 @@ main(int argc, char * argv[])
 	strcat(URL, secret_base32);
 	strcat(URL, "&period=30");
 
-
 	//otpauth://totp/ACCOUNTNAME?issuer=ISSUER&secret=SECRET&period=30
 	
-
 	//displayQRcode("otpauth://testing");
 	displayQRcode(URL);
 
