@@ -46,7 +46,7 @@ main(int argc, char * argv[])
 	#ifdef debug_print
 	printf("secret_binary:\n");
 	for (int i = 0; i < secret_binary_length; i++){
-		printf(" 0x%d", i, secret_binary[i]);
+		printf(" 0x%x", secret_binary[i]);
 	}
 	printf("\n");
 	#endif
