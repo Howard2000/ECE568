@@ -5,10 +5,12 @@
 
 #include "lib/encoding.h"
 
+#define debug_print
+
 //convert a string of hex values to a array of binary values
-//e.g. 0xa -> 1010
+//e.g. 'a' -> 1010
 //retrun a string of binary's
-char * hex_to_binary_conversion(char * hex);
+int hex_to_binary_conversion(char * hex, uint8_t ** binary_result);
 
 int
 main(int argc, char * argv[])
@@ -34,12 +36,21 @@ main(int argc, char * argv[])
 	// with Google Authenticator
 
 	//convert hex to binary
-	char * secret_binary= hex_to_binary_conversion(secret_hex);
-	if (secret_binary == NULL){
+	uint8_t * secret_binary;
+	int secret_binary_length = hex_to_binary_conversion(secret_hex, &secret_binary);
+	if (secret_binary_length == 0){
 		printf("hex_to_binary_conversion error\n");
 		return 0;
 	}
-	int secret_binary_length = strlen(secret_binary);
+
+	#ifdef debug_print
+	printf("secret_binary:\n");
+	for (int i = 0; i < secret_binary_length; i++){
+		printf(" 0x%d", i, secret_binary[i]);
+	}
+	printf("\n");
+	#endif
+
 
 	//encode all inputs
 	const char *encoded_accountName; 
@@ -78,17 +89,16 @@ main(int argc, char * argv[])
 }
 
 
-char * hex_to_binary_conversion(char * hex){
+int hex_to_binary_conversion(char * hex, uint8_t ** binary_result){
 	int hex_length = strlen(hex);
 	if (hex_length<=0){
 		printf("Invalid hex number length: %d\n", hex_length);
-		return NULL;
+		return 0;
 	}
 
 	//allocate binary
 	int binary_length = hex_length/2;//binary length = hex_length*4
-	char * binary_result = malloc(sizeof(char)*binary_length+1); 
-	binary_result[binary_length] = '\0';
+	*binary_result = malloc(sizeof(uint8_t)*binary_length); 
 	//conversion
 	uint8_t digit = 0;
 	uint8_t last_digit = 0;
@@ -144,17 +154,19 @@ char * hex_to_binary_conversion(char * hex){
 			break;
 		default:
 			printf("Invalid hex digit: %c\n", hex[i]);
-			return NULL;
+			return 0;
 			break;
 		}
 
 		if (i%2 == 1){
-			binary_result[i/2] = last_digit*16+digit;
+			(*binary_result)[i/2] = last_digit*16+digit;
 		}
 
 		last_digit = digit;
 
 	}
 	
-	return binary_result;
+	// printf("here\n");
+
+	return binary_length;
 }
