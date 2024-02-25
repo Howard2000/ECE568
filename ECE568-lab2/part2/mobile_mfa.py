@@ -222,6 +222,44 @@ class BioConnect:
 		# >>> Add code here to call
 		#    .../v2/users/<userId>/authenicators/<authenticatorId>
 		# and process the response
+		global	hostname
+
+		url = 'https://%s/v2/users/%s/authenticators/%s' % \
+			( hostname, self.userId, self.authenticatorId )
+		
+		headers = {
+			'Content-Type':		'application/json',
+			'accept':		'application/json',
+			'bcaccesskey':		self.bcaccesskey,
+			'bcentitykey':		self.bcentitykey,
+			'bctoken':		self.bctoken
+		}
+
+		# Send our GET request to the server
+		result = requests.get(url, headers=headers)
+
+		if result == False:
+			# Error: we did not receive an HTTP/200
+			print(headers)
+			print(result.content)
+			sys.exit("Error: unable to get response")
+
+		try:
+			# Parse the JSON reply
+			reply = json.loads(result.content.decode('utf-8'))
+
+			status = reply.get("status","")
+			face_status = reply.get("face_status","")
+			voice_status = reply.get("voice_status","")
+			fingerprint_status = reply.get("fingerprint_status_status","")
+			eye_status = reply.get("eye_status","")
+
+			if status=='active' and (face_status=='enrolled' or voice_status=='enrolled' or fingerprint_status=='enrolled' or eye_status=='enrolled'):
+				return('active')
+
+
+		except ValueError:
+			pass
 
 		return('')
 
@@ -235,9 +273,45 @@ class BioConnect:
 		# >>> Add code here to call
 		#     .../v2/user_verifications
 		# to push an authentication request to the mobile device
+		global	hostname
 
-		pass
+		url = 'https://%s/v2/user_verifications' % \
+			( hostname )
 
+		headers = {
+			'Content-Type':		'application/json',
+			'accept':		'application/json',
+			'bcaccesskey':		self.bcaccesskey,
+			'bcentitykey':		self.bcentitykey,
+			'bctoken':		self.bctoken
+		}
+
+		data = {
+			'user_uuid':			self.userId,
+			'transaction_id':		transactionId,
+			'message':	message
+		}
+
+		# Send our POST request to the server
+		result = requests.post(url, data=json.dumps(data), headers=headers)
+
+		if result == False:
+			# Error: we did not receive an HTTP/200
+			print(headers)
+			print(result.content)
+			sys.exit("Error: unable to get response")
+
+		try:
+			# Parse the JSON reply
+			reply = json.loads(result.content.decode('utf-8'))
+
+			user_verification = reply.get('user_verification','')
+			self.stepupId = user_verification.get('uuid','')
+			# print(self.stepupId)
+		except ValueError:
+			pass
+
+	
 	# ===== getStepupStatus: Fetches the status of the user auth request
 
 	def getStepupStatus(self):
@@ -245,8 +319,40 @@ class BioConnect:
 		# >>> Add code here to call
 		#     .../v2/user_verifications/<verificationId>
 		# to poll for the current status of the verification
+		global	hostname
 
-		return('declined')
+		url = 'https://%s/v2/user_verifications/%s' % \
+			( hostname, self.stepupId )
+		
+		headers = {
+			'Content-Type':		'application/json',
+			'accept':		'application/json',
+			'bcaccesskey':		self.bcaccesskey,
+			'bcentitykey':		self.bcentitykey,
+			'bctoken':		self.bctoken
+		}
+
+		# Send our GET request to the server
+		result = requests.get(url, headers=headers)
+
+		# if result == False:
+		# 	# Error: we did not receive an HTTP/200
+		# 	print(headers)
+		# 	print(result.content)
+		# 	sys.exit("Error: unable to get QR code")
+
+		try:
+			# Parse the JSON reply
+			reply = json.loads(result.content.decode('utf-8'))
+
+			user_verification = reply.get('user_verification','')
+			status = user_verification.get('status','')
+			# print(status)
+
+		
+		except ValueError:
+			pass
+		return(status)
 
 
 	# ===== deleteUser: Deletes the user and mobile phone entries
