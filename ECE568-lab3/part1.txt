@@ -1,0 +1,46 @@
+<form accept-charset="UNKNOWN" method="GET" name="form" action="#attack/1073957004/700" enctype="">
+<!-- FIXME admin:adminpw  --><!-- Use Admin to regenerate database  -->
+<h1>Sign In </h1>
+<table align="center" cellspacing="0" width="90%" border="0" cellpadding="2">
+    <tbody>
+        <tr>
+            <th colspan="2" align="left">Please sign in to your account.  See the OWASP admin if you do not have an account.</th>
+        </tr>
+        <tr>
+            <td width="30%">*Required Fields</td>
+        </tr>
+        <tr>
+            <td colspan="2">&nbsp;</td>
+        </tr>
+        <tr>
+            <td>
+                <b>*User Name : </b>
+            </td>
+            <td>
+                <input name="Username" id="ece568_2022s_user" type="TEXT" value="ece568_2022s_user">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <b>*Password : </b>
+            </td>
+            <td>
+                <input name="Password" id="ece568_2022s_pw" type="PASSWORD" value="ece568_2022s_pw">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <button id="ece568_2022s_submit" onclick="submit_credentials()"> Submit </button>
+                <!--<button name="SUBMIT" id="ece568_2022s_submit" type="SUBMIT" value="ece568_2022s_submit"> -->
+            </td>
+        </tr>
+    </tbody>
+</table>
+<script>
+    function submit_credentials() {
+         document.getElementById("ece568_2022s_user").style.backgroundColor = "green";
+      }
+</script>
+
+</form>
+
