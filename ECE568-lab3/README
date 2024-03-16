@@ -27,3 +27,8 @@ The code listens to the click event, and then send the card number to the url.
         xmlHttp.send( null );
     };
 </script>
+
+
+Part 3 Explanation:
+We constructed a url as requested. We put a image in the message, and the image points a malicious request. When user opens the image and they are authenticated, their funds will be transfered.
+
