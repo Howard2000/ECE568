@@ -1,5 +1,5 @@
 #Joshua Ma, 1006726090, joshua.ma@mail.utoronto.ca
-#first2 last2, studentnum2, e-mail2
+#Hao Zhu, 1006083765, howard.zhu@mail.utoronto.ca
 
 
 Part 1 Explanation:
@@ -30,5 +30,7 @@ The code listens to the click event, and then send the card number to the url.
 
 
 Part 3 Explanation:
-We constructed a url as requested. We put a image in the message, and the image points a malicious request. When user opens the image and they are authenticated, their funds will be transfered.
+We constructed a url as requested. We put a image in the message, and the image points to a malicious request. When user opens the image and they are authenticated, their funds will be transfered.
 
+Part 4 Explanation:
+The first image is the same as Part 3, which points to a malicious request. And the second bypass the confirm button click by sending a faked confirm action to the server.
