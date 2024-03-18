@@ -34,3 +34,19 @@ We constructed a url as requested. We put a image in the message, and the image 
 
 Part 4 Explanation:
 The first image is the same as Part 3, which points to a malicious request. And the second bypass the confirm button click by sending a faked confirm action to the server.
+
+Part 5 Explanation:
+
+Part 6 Explanation:
+The query is: SELECT * FROM user_data WHERE last_name =''. Since the input is a string, we just need to put 'or '1' = '1 between the ''. Now we have two conditions in the WHERE statement. Because '1' = '1' is always true, all the credit card number will be displayed.
+
+Part 7 Explanation:
+For the first part, we can use ";" after the userid input to add another update command, and use comment mark "--" to ignore all the query after that.
+For the second part, we use the same technique to add the trigger command. The the syntax of a trigger is:
+CREATE TRIGGER <trigger_name> BEFORE INSERT ON <table> FOR EACH ROW BEGIN UPDATE <table> SET <field>=<new_value> WHERE userid = NEW.userid.
+
+Part 8 Explanation:
+use "101 and ((select pin from credit where cc_number = '1234123412341234') < 10000);" to figure out the pin.
+We narrow down the range half by half: 0 - 10000, 0 - 5000, 2500 - 5000, 2500 - 3750, 3125 - 3750, 3125 - 3438, 3282 - 3438, 3282 - 3360, 3282 - 3321, 3302 - 3321, 3312 -3321, 3317 - 3321, 3317 -3319
+Finally we use "101 and ((select pin from credit where cc_number = '1234123412341234') = 3318);" to confirm the pin number.
+the return is valid so the pin is 3318
