@@ -36,6 +36,7 @@ Part 4 Explanation:
 The first image is the same as Part 3, which points to a malicious request. And the second bypass the confirm button click by sending a faked confirm action to the server.
 
 Part 5 Explanation:
+First, we open the transfer=main page and use script to read the token value. Second we input the transfer value with the token suffix to construct the new url to conplete the transfer.
 
 Part 6 Explanation:
 The query is: SELECT * FROM user_data WHERE last_name =''. Since the input is a string, we just need to put 'or '1' = '1 between the ''. Now we have two conditions in the WHERE statement. Because '1' = '1' is always true, all the credit card number will be displayed.

