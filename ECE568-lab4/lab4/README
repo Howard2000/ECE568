@@ -1,3 +1,4 @@
 Part 1:
-Run dig utoronto.ca ANY. We can find the IP address of utoronto.ca in the answer section. We can also find the names and the IP of the name servers in the Additional Section.
-Run dig utoronto.ca MX. We can find multiple IPs for the mail servers.
+Run dig "utoronto.ca ANY". We can find the IP address of utoronto.ca in the answer section. We can also find the names and the IP of the name servers in the Additional Section.
+Run dig "utoronto.ca MX". We can find multiple IPs for the mail servers.
+Run dig "utoronto.ca @127.0.0.1 -p 4702" to direct dig to my local BIND server. 4702 is the port BIND is listening to DNS queries.
