@@ -24,6 +24,12 @@ dns_port = args.dns_port
 # port that your bind uses to send its DNS queries
 my_query_port = args.query_port
 
+#python2 dnsproxy_starter.py --port <PROXY port number> --dns_port <NAMED port number>.
+#python2 dnsproxy_starter.py --port 4704 --dns_port 4702
+print(my_ip, my_port, dns_port, my_query_port)
+
+print("gereasdsadsadasd")
+
 '''
 Generates random strings of length 10.
 '''
