@@ -37,7 +37,7 @@ while True:
     #send received data to BIND server
     sock.sendto(data[0], ("127.0.0.1", dns_port))
 
-    data = sock.recvfrom(8192)
+    data = sock.recvfrom(8192) #can receive data from different port (UDP packets)
     #print("BIND data:",data[0], "BIND addr", data[1])
 
     if SPOOF:
@@ -47,9 +47,7 @@ while True:
         # Show the parsed packet
         print("Parsed packet:")
         print(packet.show())
-        print("here")
-        print("\n\n\n\n")
-        print(packet[DNS].an.rdata)
+        #print(packet[DNS].an.rdata)
 
         # Change Ip
         packet[DNS].an.rdata = "1.2.3.4"
