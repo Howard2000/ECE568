@@ -2,3 +2,11 @@ Part 1:
 Run dig "utoronto.ca ANY". We can find the IP address of utoronto.ca in the answer section. We can also find the names and the IP of the name servers in the Additional Section.
 Run dig "utoronto.ca MX". We can find multiple IPs for the mail servers.
 Run dig "utoronto.ca @127.0.0.1 -p 4702" to direct dig to my local BIND server. 4702 is the port BIND is listening to DNS queries.
+
+Part2: 
+Use python's socket package to receive data from dig and send it to the BIND server, and receive the DNS reply from the BIND server and send it back to dig.
+
+Part3:
+Modify the DNS reply from the BIND server using scapy. We used DNS() in scapy to decode information from the packet and change the IP address and the name server domains.
+
+Part4:
