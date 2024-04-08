@@ -36,9 +36,10 @@ while True:
     dig_addr = data[1]
 
     #send received data to BIND server
-    sock.sendto(data[0], ("127.0.0.1", dns_port))
+    sock1 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    sock1.sendto(data[0], ("127.0.0.1", dns_port))
 
-    data = sock.recvfrom(8192) #can receive data from different port (UDP packets)
+    data = sock1.recvfrom(8192)
     print("BIND data:",data[0], "BIND addr", data[1])
 
     if SPOOF:
