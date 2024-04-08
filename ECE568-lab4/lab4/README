@@ -1,3 +1,7 @@
+#Joshua Ma, 1006726090, joshua.ma@mail.utoronto.ca
+#Hao Zhu, 1006083765, howard.zhu@mail.utoronto.ca
+
+
 Part 1:
 Run dig "utoronto.ca ANY". We can find the IP address of utoronto.ca in the answer section. We can also find the names and the IP of the name servers in the Additional Section.
 Run dig "utoronto.ca MX". We can find multiple IPs for the mail servers.
